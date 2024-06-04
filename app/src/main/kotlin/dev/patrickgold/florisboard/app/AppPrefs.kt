@@ -624,7 +624,7 @@ class AppPrefs : PreferenceModel("florisboard-app-prefs") {
         )
         val blockPossiblyOffensive = boolean(
             key = "suggestion__block_possibly_offensive",
-            default = true,
+            default = false,
         )
         val clipboardContentEnabled = boolean(
             key = "suggestion__clipboard_content_enabled",

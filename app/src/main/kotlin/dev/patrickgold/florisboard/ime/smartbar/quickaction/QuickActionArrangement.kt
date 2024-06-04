@@ -58,15 +58,17 @@ data class QuickActionArrangement(
                 QuickAction.InsertKey(TextKeyData.UNDO),
                 QuickAction.InsertKey(TextKeyData.REDO),
                 QuickAction.InsertKey(TextKeyData.SETTINGS),
-                QuickAction.InsertKey(TextKeyData.TOGGLE_INCOGNITO_MODE),
-                QuickAction.InsertKey(TextKeyData.IME_UI_MODE_CLIPBOARD),
-                QuickAction.InsertKey(TextKeyData.IME_UI_MODE_MEDIA),
+                QuickAction.InsertKey(TextKeyData.IME_UI_MODE_MEDIA), // Emoji
+                /*
                 QuickAction.InsertKey(TextKeyData.COMPACT_LAYOUT_TO_RIGHT),
                 QuickAction.InsertKey(TextKeyData.TOGGLE_AUTOCORRECT),
                 QuickAction.InsertKey(TextKeyData.ARROW_UP),
                 QuickAction.InsertKey(TextKeyData.ARROW_DOWN),
                 QuickAction.InsertKey(TextKeyData.ARROW_LEFT),
                 QuickAction.InsertKey(TextKeyData.ARROW_RIGHT),
+                */
+                QuickAction.InsertKey(TextKeyData.TOGGLE_INCOGNITO_MODE),
+                QuickAction.InsertKey(TextKeyData.IME_UI_MODE_CLIPBOARD),
                 QuickAction.InsertKey(TextKeyData.CLIPBOARD_CLEAR_PRIMARY_CLIP),
                 QuickAction.InsertKey(TextKeyData.CLIPBOARD_COPY),
                 QuickAction.InsertKey(TextKeyData.CLIPBOARD_CUT),

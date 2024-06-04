@@ -52,7 +52,7 @@ fun ProvideLocalizedResources(
     CompositionLocalProvider(
         LocalResourcesContext provides resourcesContext,
         LocalLayoutDirection provides layoutDirection,
-        LocalAppNameString provides stringResource(R.string.floris_app_name),
+        LocalAppNameString provides stringResource(R.string.auteur_app_name),
     ) {
         content()
     }
