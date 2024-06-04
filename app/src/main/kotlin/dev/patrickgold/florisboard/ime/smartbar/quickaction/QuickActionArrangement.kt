@@ -57,7 +57,6 @@ data class QuickActionArrangement(
             dynamicActions = listOf(
                 QuickAction.InsertKey(TextKeyData.UNDO),
                 QuickAction.InsertKey(TextKeyData.REDO),
-                QuickAction.InsertKey(TextKeyData.SETTINGS),
                 QuickAction.InsertKey(TextKeyData.IME_UI_MODE_MEDIA), // Emoji
                 /*
                 QuickAction.InsertKey(TextKeyData.COMPACT_LAYOUT_TO_RIGHT),
@@ -74,6 +73,7 @@ data class QuickActionArrangement(
                 QuickAction.InsertKey(TextKeyData.CLIPBOARD_CUT),
                 QuickAction.InsertKey(TextKeyData.CLIPBOARD_PASTE),
                 QuickAction.InsertKey(TextKeyData.CLIPBOARD_SELECT_ALL),
+                QuickAction.InsertKey(TextKeyData.SETTINGS),
             ),
             hiddenActions = listOf(
             ),

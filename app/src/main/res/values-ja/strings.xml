@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">FlorisBoard</string>
+    <string name="app_name">Auteur</string>
     <string name="key__phone_pause" comment="Label for the Pause key in the telephone keyboard layout">一時停止</string>
     <string name="key__phone_wait" comment="Label for the Wait key in the telephone keyboard layout">お待ちください</string>
     <string name="key_popup__threedots_alt" comment="Content description for the three-dots icon in a key popup">3つのドットのアイコン。 表示されている場合は長押しするとより多くの文字を使用できることを示します。</string>
@@ -56,8 +56,8 @@
     <string name="settings__default" comment="General string which is used when a preference has the default value set">デフォルト</string>
     <string name="settings__system_default" comment="General string which is used when a preference has the system default value set">システムのデフォルト</string>
     <string name="settings__home__title" comment="Title of the Home screen">ようこそ！{app_name}</string>
-    <string name="settings__home__ime_not_enabled" comment="Error message shown in Home fragment when FlorisBoard is not enabled in the system">FlorisBoardはシステムで有効になっていないため、入力ピッカーの入力メソッドとして使用できません。 この問題を解決するには、ここをタップしてください。</string>
-    <string name="settings__home__ime_not_selected" comment="Warning message shown in Home fragment when FlorisBoard is not selected as the default keyboard">FlorisBoardは、デフォルトの入力方法として選択されていません。 この問題を解決するには、ここをタップしてください。</string>
+    <string name="settings__home__ime_not_enabled" comment="Error message shown in Home fragment when Auteur is not enabled in the system">Auteurはシステムで有効になっていないため、入力ピッカーの入力メソッドとして使用できません。 この問題を解決するには、ここをタップしてください。</string>
+    <string name="settings__home__ime_not_selected" comment="Warning message shown in Home fragment when Auteur is not selected as the default keyboard">Auteurは、デフォルトの入力方法として選択されていません。 この問題を解決するには、ここをタップしてください。</string>
     <string name="settings__localization__title" comment="Title of languages and Layout screen">言語 &amp; 入力</string>
     <string name="settings__localization__display_language_names_in__label" comment="Label of Display language names in preference">で言語名を表示する</string>
     <string name="settings__localization__group_subtypes__label" comment="Label of subtypes group">サブタイプ</string>
@@ -98,7 +98,7 @@
     <string name="pref__theme__any_theme__label" comment="Label of the theme selector preference">選択されたテーマ</string>
     <string name="pref__theme__any_theme_adapt_to_app__label" comment="Label of the theme adapt to app preference">アプリに色を適応</string>
     <string name="pref__theme__any_theme_adapt_to_app__summary" comment="Summary of the theme adapt to app preference">ターゲットアプリがこれをサポートしている場合、テーマの色は現在のアプリの色に適合します。</string>
-    <string name="pref__theme__source_assets" comment="Label for the theme source field">FlorisBoardアプリアセット</string>
+    <string name="pref__theme__source_assets" comment="Label for the theme source field">Auteurアプリアセット</string>
     <string name="pref__theme__source_internal" comment="Label for the theme source field">内部ストレージ</string>
     <string name="pref__theme__source_external" comment="Label for the theme source field">外部プロバイダー</string>
     <string name="settings__theme_manager__title_day" comment="Title of the theme manager screen for day theme selection">日のテーマを選択</string>
@@ -276,7 +276,7 @@
     <!-- Back up & Restore -->
     <string name="backup_and_restore__restore__metadata_warn_different_version">このバックアップ アーカイブは、通常サポートされている現在とは別のバージョンで生成されました。 ただし、機能の違いにより、軽微な問題が発生したり、一部の設定が正しく転送されない場合があることに注意してください。</string>
     <!-- Crash Dialog strings -->
-    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">このエラーを報告する場合、クラッシュがまだ報告されていない場合は、まず GitHub の課題トラッカーを確認してください。\n報告されていない場合は、生成されたクラッシュ ログをコピーして、新しい課題を開きます。 \"%s\"テンプレートを使用して、説明と再現手順を入力し、生成されたクラッシュ ログを最後に貼り付けます。 これは、FlorisBoard を誰にとってもより良く、より安定させるのに役立ちます。 ありがとうございました！</string>
+    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">このエラーを報告する場合、クラッシュがまだ報告されていない場合は、まず GitHub の課題トラッカーを確認してください。\n報告されていない場合は、生成されたクラッシュ ログをコピーして、新しい課題を開きます。 \"%s\"テンプレートを使用して、説明と再現手順を入力し、生成されたクラッシュ ログを最後に貼り付けます。 これは、Auteur を誰にとってもより良く、より安定させるのに役立ちます。 ありがとうございました！</string>
     <!-- Clipboard strings -->
     <string name="clipboard__disabled__message">{app_name} のクリップボード履歴を使用すると、コピーしたテキストや画像をすばやく保存してアクセスできます。また、アイテムを固定したり、自動クリーンアップを構成したり、アイテムの上限を設定したりできます。</string>
     <!-- Devtools strings -->
