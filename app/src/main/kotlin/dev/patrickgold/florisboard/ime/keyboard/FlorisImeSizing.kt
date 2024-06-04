@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.app.florisPreferenceModel
-import dev.patrickgold.florisboard.ime.onehanded.OneHandedMode
 import dev.patrickgold.florisboard.ime.smartbar.ExtendedActionsPlacement
 import dev.patrickgold.florisboard.ime.smartbar.SmartbarLayout
 import dev.patrickgold.florisboard.ime.text.keyboard.TextKeyboard
@@ -112,16 +111,13 @@ fun ProvideKeyboardRowBaseHeight(content: @Composable () -> Unit) {
 
     val heightFactorPortrait by prefs.keyboard.heightFactorPortrait.observeAsTransformingState { it.toFloat() / 100f }
     val heightFactorLandscape by prefs.keyboard.heightFactorLandscape.observeAsTransformingState { it.toFloat() / 100f }
-    val oneHandedMode by prefs.keyboard.oneHandedMode.observeAsState()
-    val oneHandedModeScaleFactor by prefs.keyboard.oneHandedModeScaleFactor.observeAsTransformingState { it.toFloat() / 100f }
 
     val baseRowHeight = remember(
-        configuration, resources, heightFactorPortrait, heightFactorLandscape,
-        oneHandedMode, oneHandedModeScaleFactor,
+        configuration, resources, heightFactorPortrait, heightFactorLandscape
     ) {
         calcInputViewHeight(resources) * when {
             configuration.isOrientationLandscape() -> heightFactorLandscape
-            else -> heightFactorPortrait * (if (oneHandedMode != OneHandedMode.OFF) oneHandedModeScaleFactor else 1f)
+            else -> heightFactorPortrait * 1f
         }
     }
     val smartbarHeight = baseRowHeight * 0.753f

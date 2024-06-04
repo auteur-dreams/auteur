@@ -34,7 +34,6 @@ import dev.patrickgold.florisboard.ime.media.emoji.EmojiHairStyle
 import dev.patrickgold.florisboard.ime.media.emoji.EmojiRecentlyUsedHelper
 import dev.patrickgold.florisboard.ime.media.emoji.EmojiSkinTone
 import dev.patrickgold.florisboard.ime.nlp.SpellingLanguageMode
-import dev.patrickgold.florisboard.ime.onehanded.OneHandedMode
 import dev.patrickgold.florisboard.ime.smartbar.CandidatesDisplayMode
 import dev.patrickgold.florisboard.ime.smartbar.ExtendedActionsPlacement
 import dev.patrickgold.florisboard.ime.smartbar.IncognitoDisplayMode
@@ -55,7 +54,6 @@ import dev.patrickgold.jetpref.datastore.JetPref
 import dev.patrickgold.jetpref.datastore.model.PreferenceMigrationEntry
 import dev.patrickgold.jetpref.datastore.model.PreferenceModel
 import dev.patrickgold.jetpref.datastore.model.PreferenceType
-import dev.patrickgold.jetpref.datastore.model.observeAsState
 
 fun florisPreferenceModel() = JetPref.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
@@ -424,14 +422,6 @@ class AppPrefs : PreferenceModel("florisboard-app-prefs") {
             key = "keyboard__font_size_multiplier_landscape",
             default = 100,
         )
-        val oneHandedMode = enum(
-            key = "keyboard__one_handed_mode",
-            default = OneHandedMode.OFF,
-        )
-        val oneHandedModeScaleFactor = int(
-            key = "keyboard__one_handed_mode_scale_factor",
-            default = 87,
-        )
         val landscapeInputUiMode = enum(
             key = "keyboard__landscape_input_ui_mode",
             default = LandscapeInputUiMode.DYNAMICALLY_SHOW,
@@ -498,18 +488,12 @@ class AppPrefs : PreferenceModel("florisboard-app-prefs") {
         @Composable
         fun fontSizeMultiplier(): Float {
             val configuration = LocalConfiguration.current
-            val oneHandedMode by oneHandedMode.observeAsState()
-            val oneHandedModeFactor by oneHandedModeScaleFactor.observeAsTransformingState { it / 100.0f }
             val fontSizeMultiplierBase by if (configuration.isOrientationPortrait()) {
                 fontSizeMultiplierPortrait
             } else {
                 fontSizeMultiplierLandscape
             }.observeAsTransformingState { it / 100.0f }
-            val fontSizeMultiplier = fontSizeMultiplierBase * if (oneHandedMode != OneHandedMode.OFF && configuration.isOrientationPortrait()) {
-                oneHandedModeFactor
-            } else {
-                1.0f
-            }
+            val fontSizeMultiplier = fontSizeMultiplierBase * 1.0f
             return fontSizeMultiplier
         }
     }
