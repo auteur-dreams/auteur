@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">الرموز التعبيرية</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">الرموز التعبيرية</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">وجوه تعبيرية</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">كاوموجي</string>
     <string name="prefs__media__emoji_recently_used_max_size">الحد الأقصى لحجم السجل للرموز التعبيرية</string>
     <string name="prefs__media__emoji_preferred_skin_tone">لون الرموز التعبيرية المفضل</string>

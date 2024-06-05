@@ -9,7 +9,7 @@
     <li>Cambio automático de tema diurno/nocturno.</li>
     <li>Layouts de teclado para escribir números (de teléfono).</li>
     <li>Caracteres especiales.</li>
-    <li>Teclado de Emojis/Emoticones.</li>
+    <li>Teclado de Emojis.</li>
     <li>Modo Compacto/Una Mano, para una escritura más fácil en dispositivos grandes.</li>
     <li>Personalización de vibración y del sonido al presionar las teclas.</li>
     <li>Acciones personalizables para gestos: deslizar arriba/abajo/izq./der./, barra de espacio a la izquierda/derecha, deslizar la tecla de borrado.</li>

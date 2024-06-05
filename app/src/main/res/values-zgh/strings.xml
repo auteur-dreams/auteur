@@ -4,7 +4,6 @@
     <!-- One-handed strings -->
     <!-- Media strings -->
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">ⵉⵎⵓⵊⵉⵜⵏ</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">ⵜⵉⵙⵢⴰⴼⴽⵓⵏⵉⵏ</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">ⴽⴰⵡⵎⵓⵊⵉ</string>
     <!-- Emoji strings -->
     <string name="emoji__category__food_drink" comment="Emoji category name">ⵓⵜⵛⵉ &amp; ⵜⵉⵙⵙⵉ</string>

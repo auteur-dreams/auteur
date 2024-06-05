@@ -9,7 +9,6 @@
     <string name="one_handed__move_end_btn_content_description" comment="Content description for the one-handed move to right button">Flytta tangentbord till höger.</string>
     <!-- Media strings -->
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Emojis</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Emotikoner</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Kaomoji</string>
     <!-- Emoji strings -->
     <string name="emoji__category__smileys_emotion" comment="Emoji category name">Smileys &amp; Emotikoner</string>

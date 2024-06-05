@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">Emotikoni</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Emotikoni</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Emotikoni</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Kaoemotikoni</string>
     <string name="prefs__media__emoji_recently_used_max_size">Prikazana povijest korištenih emotikona je maksimalna</string>
     <string name="prefs__media__emoji_preferred_skin_tone">Željeni ton boje emotikona</string>

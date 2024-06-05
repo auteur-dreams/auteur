@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">Emûcî</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Emojîyan</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Hestnîşan</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Kaomoji</string>
     <string name="prefs__media__emoji_recently_used_max_size">Mezinahiya dîrokê emûcîyan</string>
     <string name="prefs__media__emoji_preferred_skin_tone">Tona çermê emojî ya tercîhkirî</string>

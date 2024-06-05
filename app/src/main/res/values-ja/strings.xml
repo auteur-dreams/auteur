@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">絵文字</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">絵文字</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">絵文字</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">顔文字</string>
     <string name="prefs__media__emoji_recently_used_max_size">絵文字履歴の最大サイズ</string>
     <string name="prefs__media__emoji_preferred_skin_tone">好みの絵文字の肌の色</string>

@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">Fustaxes</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Fustaxes</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Fustaxes ASCII</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Kaomoji</string>
     <!-- Emoji strings -->
     <string name="emoji__category__smileys_emotion" comment="Emoji category name">Sorrises y fustaxes</string>

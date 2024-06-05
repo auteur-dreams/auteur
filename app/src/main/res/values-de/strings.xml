@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">Emojis</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Emojis</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Emoticons</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Kaomoji</string>
     <string name="prefs__media__emoji_recently_used_max_size">Maximale Größe des Emoji-Verlaufs</string>
     <string name="prefs__media__emoji_preferred_skin_tone">Bevorzugte Emoji-Hautfarbe</string>

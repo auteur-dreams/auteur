@@ -6,7 +6,6 @@
     <!-- One-handed strings -->
     <!-- Media strings -->
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Emoĝioj</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Miensimboloj</string>
     <!-- Emoji strings -->
     <string name="emoji__category__smileys_emotion" comment="Emoji category name">Mienetoj &amp; Emocioj</string>
     <string name="emoji__category__people_body" comment="Emoji category name">Homoj &amp; Korpo</string>

@@ -11,7 +11,6 @@
     <!-- Media strings -->
     <string name="settings__media__title">خەندەکان</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">خەندەکان</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">هێمای دەربڕینی هەستەکان</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">کامۆجی</string>
     <string name="prefs__media__emoji_recently_used_max_size">ڕێژەی پیشاندانی خەندە لە مێژووی خەندەکان</string>
     <string name="prefs__media__emoji_preferred_skin_tone">ڕەنگی بنەڕەتی خەندەکان</string>

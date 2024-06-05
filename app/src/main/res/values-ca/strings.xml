@@ -11,13 +11,12 @@
     <!-- Media strings -->
     <string name="settings__media__title">Emojis</string>
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Emojis</string>
-    <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Emoticones</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Kaomoji</string>
     <string name="prefs__media__emoji_recently_used_max_size">Mida màxima de l\'historial d\'emojis</string>
     <string name="prefs__media__emoji_preferred_skin_tone">To de pell preferit dels emojis</string>
     <string name="prefs__media__emoji_preferred_hair_style">Pentinat preferit dels emojis</string>
     <!-- Emoji strings -->
-    <string name="emoji__category__smileys_emotion" comment="Emoji category name">Emoticones &amp; emocions</string>
+    <string name="emoji__category__smileys_emotion" comment="Emoji category name">Emocions</string>
     <string name="emoji__category__people_body" comment="Emoji category name">Persones &amp; Cos</string>
     <string name="emoji__category__animals_nature" comment="Emoji category name">Animals &amp; Natura</string>
     <string name="emoji__category__food_drink" comment="Emoji category name">Menjar &amp; Beure</string>

@@ -9,7 +9,7 @@
     <li>Automatic day/night theme switching</li>
     <li>Keyboard layouts for typing in a (phone) number</li>
     <li>Special characters input</li>
-    <li>Emoji/Emoticon keyboard</li>
+    <li>Emoji keyboard</li>
     <li>One-handed/compact mode for easier typing on large devices</li>
     <li>Customization of key press sound/vibration</li>
     <li>Customizable actions for gestures: swipe up/down/left/right, space bar left/right, delete key swipe)</li>
