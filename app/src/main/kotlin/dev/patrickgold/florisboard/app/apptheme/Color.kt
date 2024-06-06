@@ -100,3 +100,6 @@ val surfaceContainerHighDark = Color(0xFF262C24)
 val surfaceContainerHighestDark = Color(0xFF30362E)
 
 val amoledDark = Color(0xFF000000)
+
+// Auteur Colors
+val gray300 = Color(0xFF9E9E9E)

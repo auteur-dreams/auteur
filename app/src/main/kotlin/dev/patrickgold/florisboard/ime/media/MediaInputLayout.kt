@@ -52,7 +52,7 @@ import dev.patrickgold.florisboard.ime.input.LocalInputFeedbackController
 import dev.patrickgold.florisboard.ime.keyboard.FlorisImeSizing
 import dev.patrickgold.florisboard.ime.keyboard.KeyData
 import dev.patrickgold.florisboard.ime.media.emoji.EmojiData
-import dev.patrickgold.florisboard.ime.media.emoji.EmojiPaletteView
+import dev.patrickgold.florisboard.ime.media.emoji.EmojiScreen
 import dev.patrickgold.florisboard.ime.text.keyboard.TextKeyData
 import dev.patrickgold.florisboard.ime.theme.FlorisImeTheme
 import dev.patrickgold.florisboard.ime.theme.FlorisImeUi
@@ -78,7 +78,7 @@ fun MediaInputLayout(
                 .fillMaxWidth()
                 .height(FlorisImeSizing.imeUiHeight()),
         ) {
-            EmojiPaletteView(
+            MediaScreen(
                 modifier = Modifier.weight(1f),
                 fullEmojiMappings = emojiLayoutDataMap,
             )

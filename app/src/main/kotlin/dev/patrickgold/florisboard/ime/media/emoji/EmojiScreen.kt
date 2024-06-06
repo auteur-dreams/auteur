@@ -120,7 +120,7 @@ private val VariantsTriangleShapeRtl = GenericShape { size, _ ->
 }
 
 @Composable
-fun EmojiPaletteView(
+fun EmojiScreen(
     fullEmojiMappings: EmojiData,
     modifier: Modifier = Modifier,
 ) {
@@ -163,14 +163,6 @@ fun EmojiPaletteView(
     val contentColor = emojiKeyStyle.foreground.solidColor(context, default = FlorisImeTheme.fallbackContentColor())
 
     Column(modifier = modifier) {
-        EmojiCategoriesTabRow(
-            activeCategory = activeCategory,
-            onCategoryChange = { category ->
-                scope.launch { lazyListState.scrollToItem(0) }
-                activeCategory = category
-            },
-        )
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -258,6 +250,14 @@ fun EmojiPaletteView(
                 }
             }
         }
+
+        EmojiCategoriesTabRow(
+            activeCategory = activeCategory,
+            onCategoryChange = { category ->
+                scope.launch { lazyListState.scrollToItem(0) }
+                activeCategory = category
+            },
+        )
     }
 }
 

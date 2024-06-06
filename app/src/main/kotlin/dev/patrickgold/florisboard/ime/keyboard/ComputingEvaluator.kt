@@ -18,6 +18,8 @@ package dev.patrickgold.florisboard.ime.keyboard
 
 import android.content.Context
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ArrowRightAlt
 import androidx.compose.material.icons.filled.Backspace
 import androidx.compose.material.icons.filled.Close
@@ -181,10 +183,10 @@ fun ComputingEvaluator.computeImageVector(data: KeyData): ImageVector? {
     val evaluator = this
     return when (data.code) {
         KeyCode.ARROW_LEFT -> {
-            Icons.Default.KeyboardArrowLeft
+            Icons.AutoMirrored.Filled.KeyboardArrowLeft
         }
         KeyCode.ARROW_RIGHT -> {
-            Icons.Default.KeyboardArrowRight
+            Icons.AutoMirrored.Filled.KeyboardArrowRight
         }
         KeyCode.ARROW_UP -> {
             Icons.Default.KeyboardArrowUp
@@ -207,11 +209,13 @@ fun ComputingEvaluator.computeImageVector(data: KeyData): ImageVector? {
         KeyCode.CLIPBOARD_CLEAR_PRIMARY_CLIP -> {
             Icons.Default.DeleteSweep
         }
+        /*
         KeyCode.COMPACT_LAYOUT_TO_LEFT,
         KeyCode.COMPACT_LAYOUT_TO_RIGHT -> {
             // TODO: find a better icon for compact mode
             Icons.Default.Smartphone
         }
+         */
         KeyCode.VOICE_INPUT -> {
             Icons.Default.KeyboardVoice
         }
