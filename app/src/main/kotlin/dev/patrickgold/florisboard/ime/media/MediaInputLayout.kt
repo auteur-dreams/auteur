@@ -76,7 +76,7 @@ fun MediaInputLayout(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .height(FlorisImeSizing.imeUiHeight()),
+                .height(FlorisImeSizing.imeUiHeight() + FlorisImeSizing.mediaScreenAdjustment),
         ) {
             MediaScreen(
                 modifier = Modifier.weight(1f),

@@ -1,4 +1,4 @@
-[smileys_emotion]
+[emotions]
 😀;;
 😃;;
 😄;;

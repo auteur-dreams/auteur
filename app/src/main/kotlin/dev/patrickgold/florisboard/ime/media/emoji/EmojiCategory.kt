@@ -32,7 +32,7 @@ import dev.patrickgold.florisboard.R
 
 enum class EmojiCategory(val id: String) {
     RECENTLY_USED("recently_used"),
-    SMILEYS_EMOTION("smileys_emotion"),
+    EMOTIONS("emotions"),
     PEOPLE_BODY("people_body"),
     ANIMALS_NATURE("animals_nature"),
     FOOD_DRINK("food_drink"),
@@ -45,7 +45,7 @@ enum class EmojiCategory(val id: String) {
     fun icon(): ImageVector {
         return when (this) {
             RECENTLY_USED -> Icons.Default.Schedule
-            SMILEYS_EMOTION -> Icons.Default.EmojiEmotions
+            EMOTIONS -> Icons.Default.EmojiEmotions
             PEOPLE_BODY -> Icons.Default.EmojiPeople
             ANIMALS_NATURE -> Icons.Default.EmojiNature
             FOOD_DRINK -> Icons.Default.EmojiFoodBeverage

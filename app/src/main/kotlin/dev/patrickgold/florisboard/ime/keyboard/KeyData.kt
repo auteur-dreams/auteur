@@ -105,6 +105,7 @@ interface KeyData : AbstractKeyData {
         return type == KeyType.CHARACTER && (code == KeyCode.SPACE || code == KeyCode.CJK_SPACE
             || code == KeyCode.HALF_SPACE || code == KeyCode.KESHIDA)
     }
+
 }
 
 /**

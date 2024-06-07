@@ -54,6 +54,8 @@ object FlorisImeSizing {
         @ReadOnlyComposable
         get() = LocalSmartbarHeight.current
 
+    val mediaScreenAdjustment = 150.dp
+
     @Composable
     fun keyboardUiHeight(): Dp {
         val context = LocalContext.current
