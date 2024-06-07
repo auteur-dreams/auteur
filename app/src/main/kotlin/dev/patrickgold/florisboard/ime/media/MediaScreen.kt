@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.patrickgold.florisboard.app.apptheme.gray300
 import dev.patrickgold.florisboard.ime.media.emoji.EmojiData
@@ -75,6 +76,7 @@ fun CustomTabRow(
                     text = {
                         Text(
                             tab.title,
+                            fontWeight = FontWeight.Bold,
                             color = if(selectedTabIndex == index) Color.Black else Color.Gray
                         )
                     }

@@ -191,8 +191,6 @@ dependencies {
     implementation(libs.androidx.material.icons)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.runtime)
     implementation(libs.cache4k)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.json)
@@ -214,6 +212,19 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
+
+    // Android Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    // Gson (Java serialization/deserialization library to convert Java Objects into JSON and back)
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // Firebase Services
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-firestore")
 }
 
 fun getGitCommitHash(short: Boolean = false): String {

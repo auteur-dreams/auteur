@@ -35,10 +35,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.ButtonDefaults
@@ -153,7 +155,7 @@ fun EmojiScreen(
     val deviceLocked = androidKeyguardManager.let { it.isDeviceLocked || it.isKeyguardLocked }
 
     var activeCategory by remember { mutableStateOf(EmojiCategory.RECENTLY_USED) }
-    val lazyListState = rememberLazyGridState()
+    val lazyGridState = rememberLazyGridState()
     val scope = rememberCoroutineScope()
 
     val preferredSkinTone by prefs.media.emojiPreferredSkinTone.observeAsState()
@@ -161,6 +163,7 @@ fun EmojiScreen(
     val emojiKeyStyle = FlorisImeTheme.style.get(element = FlorisImeUi.EmojiKey)
     val emojiKeyFontSize = emojiKeyStyle.fontSize.spSize(default = EmojiDefaultFontSize) safeTimes fontSizeMultiplier
     val contentColor = emojiKeyStyle.foreground.solidColor(context, default = FlorisImeTheme.fallbackContentColor())
+
 
     Column(modifier = modifier) {
         Box(
@@ -212,9 +215,9 @@ fun EmojiScreen(
                     LazyVerticalGrid(
                         modifier = Modifier
                             .fillMaxSize()
-                            .florisScrollbar(lazyListState, color = contentColor.copy(alpha = 0.28f)),
+                            .florisScrollbar(lazyGridState, color = contentColor.copy(alpha = 0.28f)),
                         columns = GridCells.Adaptive(minSize = EmojiBaseWidth),
-                        state = lazyListState,
+                        state = lazyGridState,
                     ) {
                         items(emojiMapping) { emojiSet ->
                             EmojiKey(
@@ -254,7 +257,7 @@ fun EmojiScreen(
         EmojiCategoriesTabRow(
             activeCategory = activeCategory,
             onCategoryChange = { category ->
-                scope.launch { lazyListState.scrollToItem(0) }
+                scope.launch { lazyGridState.scrollToItem(0) }
                 activeCategory = category
             },
         )
