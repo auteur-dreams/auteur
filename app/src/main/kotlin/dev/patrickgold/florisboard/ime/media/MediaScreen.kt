@@ -1,5 +1,6 @@
 package dev.patrickgold.florisboard.ime.media
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

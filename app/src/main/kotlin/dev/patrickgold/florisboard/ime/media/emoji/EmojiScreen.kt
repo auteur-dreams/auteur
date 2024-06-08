@@ -131,7 +131,7 @@ fun EmojiScreen(
 ) {
     val prefs by florisPreferenceModel()
     val context = LocalContext.current
-    val application = context as Application
+    val application = context.applicationContext as Application
     val editorInstance by context.editorInstance()
     val keyboardManager by context.keyboardManager()
 
@@ -179,33 +179,36 @@ fun EmojiScreen(
     }
 
     Column(modifier = modifier) {
+        /* The MediaTab above this column is created in MediaScreen */
+
+        // Search Bar (for Emojis)
+        val emojiViewModel: EmojiViewModel = viewModel(
+            factory = ViewModelFactory(application)
+        )
+        var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+        val searchResults by emojiViewModel.searchResults.observeAsState(emptyList())
+
+
+        BasicTextField(
+            value = searchQuery,
+            onValueChange = {
+                searchQuery = it
+                emojiViewModel.searchEmojis(it.text)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .background(Color.White, CircleShape) // Optional styling
+                .padding(8.dp), // Inner padding for the text field
+            singleLine = true
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
         ) {
-            // Search Bar (for Emojis)
-/*            val emojiViewModel: EmojiViewModel = viewModel(
-                factory = ViewModelFactory(application)
-            )*/
-
-/*            var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
-
-            BasicTextField(
-                value = searchQuery,
-                onValueChange = {
-                    searchQuery = it
-                    emojiViewModel.searchEmojis(it.text)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )*/
-
-            // val searchResults by emojiViewModel.searchResults.observeAsState(emptyList())
-            val searchResults = ""
-
-            if(searchResults.isEmpty()){
+            if (searchResults.isEmpty()) {
                 var recentlyUsedVersion by remember { mutableIntStateOf(0) }
                 val emojiMapping = if (activeCategory == EmojiCategory.RECENTLY_USED) {
                     // Purposely using remember here to prevent recomposition, as this would cause rapid
