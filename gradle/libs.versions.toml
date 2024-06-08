@@ -34,6 +34,7 @@ androidx-test-uiautomator = "2.2.0"
 equalsverifier = "3.10"
 kotest = "5.4.0"
 kotest-extensions-roboelectric = "0.5.0"
+ui-desktop = "1.6.7"
 
 [libraries]
 # Main
@@ -78,6 +79,7 @@ kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.
 kotest-extensions-roboelectric = { module = "io.kotest.extensions:kotest-extensions-robolectric", version.ref = "kotest-extensions-roboelectric" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+androidx-ui-desktop = { group = "androidx.compose.ui", name = "ui-desktop", version.ref = "ui-desktop" }
 
 [plugins]
 # Main

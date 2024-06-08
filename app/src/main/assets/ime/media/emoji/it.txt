@@ -1,4 +1,4 @@
-[smileys_emotion]
+[emotions]
 😀;faccina con un gran sorriso;faccina|faccina che sogghigna|faccina con un gran sorriso|risata|sogghignare
 😃;faccina con un gran sorriso e occhi spalancati;faccina|faccina con un gran sorriso e occhi spalancati|faccina sorridente|risata|sorridere
 😄;faccina con sorriso e occhi sorridenti;bocca aperta|faccina con sorriso e occhi sorridenti|faccina con un gran sorriso e occhi sorridenti|occhi felici|risata|sorriso

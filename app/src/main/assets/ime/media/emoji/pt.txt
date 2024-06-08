@@ -1,4 +1,4 @@
-[smileys_emotion]
+[emotions]
 😀;rosto risonho;lol|rindo|risada|rosto|rosto risonho
 😃;rosto risonho com olhos bem abertos;aberto|boca|rosto|rosto risonho com olhos bem abertos|sorriso
 😄;rosto risonho com olhos sorridentes;aberta|boca|olhos|rosto|rosto risonho com olhos sorridentes|sorriso

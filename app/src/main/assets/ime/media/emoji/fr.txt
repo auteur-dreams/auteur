@@ -1,4 +1,4 @@
-[smileys_emotion]
+[emotions]
 😀;visage rieur;sourire|visage rieur
 😃;visage souriant avec de grands yeux;sourire|visage souriant avec de grands yeux
 😄;visage très souriant aux yeux rieurs;sourire|visage très souriant aux yeux rieurs

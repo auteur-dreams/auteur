@@ -1,4 +1,4 @@
-[smileys_emotion]
+[emotions]
 😀;cara sonriendo;cara|cara sonriendo|divertido|feliz|sonrisa
 😃;cara sonriendo con ojos grandes;cara|cara sonriendo con ojos grandes|divertido|risa|sonriendo
 😄;cara sonriendo con ojos sonrientes;abierta|cara|cara sonriendo con ojos sonrientes|ojo|sonrisa

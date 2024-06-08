@@ -17,6 +17,9 @@
 package dev.patrickgold.florisboard.ime.media.emoji
 
 import androidx.compose.runtime.Composable
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.ime.keyboard.AbstractKeyData
 import dev.patrickgold.florisboard.ime.keyboard.ComputingEvaluator
@@ -94,35 +97,35 @@ enum class EmojiHairStyle(val id: Int) {
     BALD(0x1F9B3);
 }
 
-data class Emoji(val value: String, val name: String, val keywords: List<String>) : KeyData {
-    override val type = KeyType.CHARACTER
-    override val code = KeyCode.UNSPECIFIED
-    override val label = value
-    override val groupId = 0
+@Entity
+data class Emoji(
+    @PrimaryKey val value: String,
+    val name: String,
+    val keywords: List<String>
+) : KeyData {
+    @Ignore
+    override val type: KeyType = KeyType.CHARACTER
+    @Ignore
+    override val code: Int = KeyCode.UNSPECIFIED
+    @Ignore
+    override val label: String = value
+    @Ignore
+    override val groupId: Int = 0
+
+    @Ignore
     override val popup: PopupSet<AbstractKeyData>? = null
 
-    val skinTone: EmojiSkinTone
+    @Ignore
+    val skinTone: EmojiSkinTone = EmojiSkinTone.entries.firstOrNull { value.codePoints().toList().contains(it.id) }
+        ?: EmojiSkinTone.DEFAULT
 
-    val hairStyle: EmojiHairStyle
+    @Ignore
+    val hairStyle: EmojiHairStyle = EmojiHairStyle.entries.firstOrNull { value.codePoints().toList().contains(it.id) }
+        ?: EmojiHairStyle.DEFAULT
 
-    val codePoints: IntStream
-        get() = value.codePoints()
+    override fun compute(evaluator: ComputingEvaluator): KeyData = this
 
-    init {
-        val codePoints = value.codePoints().toList()
-        skinTone = EmojiSkinTone.entries.firstOrNull { codePoints.contains(it.id) } ?: EmojiSkinTone.DEFAULT
-        hairStyle = EmojiHairStyle.entries.firstOrNull { codePoints.contains(it.id) } ?: EmojiHairStyle.DEFAULT
-    }
+    override fun asString(isForDisplay: Boolean): String = value
 
-    override fun compute(evaluator: ComputingEvaluator): KeyData {
-        return this
-    }
-
-    override fun asString(isForDisplay: Boolean): String {
-        return value
-    }
-
-    override fun toString(): String {
-        return "Emoji { value=$value, name=$name, keywords=$keywords }"
-    }
+    override fun toString(): String = "Emoji { value=$value, name=$name, keywords=$keywords }"
 }

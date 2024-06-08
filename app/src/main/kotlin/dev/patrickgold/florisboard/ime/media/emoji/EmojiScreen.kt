@@ -16,19 +16,17 @@
 
 package dev.patrickgold.florisboard.ime.media.emoji
 
+import android.app.Application
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.util.Log
 import android.util.TypedValue
 import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,15 +36,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
@@ -56,10 +54,9 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,11 +80,13 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
 import androidx.emoji2.text.EmojiCompat
 import androidx.emoji2.widget.EmojiTextView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.app.florisPreferenceModel
 import dev.patrickgold.florisboard.editorInstance
 import dev.patrickgold.florisboard.ime.input.LocalInputFeedbackController
 import dev.patrickgold.florisboard.ime.keyboard.FlorisImeSizing
+import dev.patrickgold.florisboard.ime.media.ViewModelFactory
 import dev.patrickgold.florisboard.ime.text.keyboard.TextKeyData
 import dev.patrickgold.florisboard.ime.theme.FlorisImeTheme
 import dev.patrickgold.florisboard.ime.theme.FlorisImeUi
@@ -132,6 +131,7 @@ fun EmojiScreen(
 ) {
     val prefs by florisPreferenceModel()
     val context = LocalContext.current
+    val application = context as Application
     val editorInstance by context.editorInstance()
     val keyboardManager by context.keyboardManager()
 
@@ -184,84 +184,108 @@ fun EmojiScreen(
                 .fillMaxWidth()
                 .weight(1f),
         ) {
-            var recentlyUsedVersion by remember { mutableIntStateOf(0) }
-            val emojiMapping = if (activeCategory == EmojiCategory.RECENTLY_USED) {
-                // Purposely using remember here to prevent recomposition, as this would cause rapid
-                // emoji changes for the user when in recently used category.
-                remember(recentlyUsedVersion) {
-                    prefs.media.emojiRecentlyUsed.get().map { EmojiSet(listOf(it)) }
-                }
-            } else {
-                emojiMappings[activeCategory] ?: emptyList()
-            }
-            if (activeCategory == EmojiCategory.RECENTLY_USED && deviceLocked) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(all = 8.dp),
-                ) {
-                    Text(
-                        text = stringRes(R.string.emoji__recently_used__phone_locked_message),
-                        color = contentColor,
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 8.dp),
-                        text = stringRes(R.string.emoji__recently_used__removal_tip),
-                        color = contentColor,
-                        fontStyle = FontStyle.Italic,
-                    )
-                }
-            } else {
-                LazyVerticalGrid(
-                    state = lazyGridState,
-                    columns = GridCells.Fixed(8),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(12.dp, 0.dp)
-                ) {
-                    emojiMappings.forEach { (category, emojiCategory) ->
-                        if (emojiCategory.isNotEmpty()) {
-                            item(span = { GridItemSpan(8) }) {
-                                Text(
-                                    text = category.toString(),
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
-                            }
+            // Search Bar (for Emojis)
+/*            val emojiViewModel: EmojiViewModel = viewModel(
+                factory = ViewModelFactory(application)
+            )*/
 
-                            items(emojiCategory) { emojiSet ->
-                                Box(
-                                    modifier = Modifier
-                                        .padding(4.dp)
-                                        .aspectRatio(1f)
-                                ) {
-                                    EmojiKey(
-                                        emojiSet = emojiSet,
-                                        emojiCompatInstance = emojiCompatInstance,
-                                        preferredSkinTone = preferredSkinTone,
-                                        contentColor = contentColor,
-                                        fontSize = emojiKeyFontSize,
-                                        fontSizeMultiplier = fontSizeMultiplier,
-                                        onEmojiInput = { emoji ->
-                                            keyboardManager.inputEventDispatcher.sendDownUp(emoji)
-                                            scope.launch {
-                                                EmojiRecentlyUsedHelper.addEmoji(prefs, emoji)
-                                            }
-                                        },
-                                        onLongPress = { emoji ->
-                                            if (activeCategory == EmojiCategory.RECENTLY_USED) {
+/*            var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+
+            BasicTextField(
+                value = searchQuery,
+                onValueChange = {
+                    searchQuery = it
+                    emojiViewModel.searchEmojis(it.text)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )*/
+
+            // val searchResults by emojiViewModel.searchResults.observeAsState(emptyList())
+            val searchResults = ""
+
+            if(searchResults.isEmpty()){
+                var recentlyUsedVersion by remember { mutableIntStateOf(0) }
+                val emojiMapping = if (activeCategory == EmojiCategory.RECENTLY_USED) {
+                    // Purposely using remember here to prevent recomposition, as this would cause rapid
+                    // emoji changes for the user when in recently used category.
+                    remember(recentlyUsedVersion) {
+                        prefs.media.emojiRecentlyUsed.get().map { EmojiSet(listOf(it)) }
+                    }
+                } else {
+                    emojiMappings[activeCategory] ?: emptyList()
+                }
+
+                if (activeCategory == EmojiCategory.RECENTLY_USED && deviceLocked) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(all = 8.dp),
+                    ) {
+                        Text(
+                            text = stringRes(R.string.emoji__recently_used__phone_locked_message),
+                            color = contentColor,
+                        )
+                        Text(
+                            modifier = Modifier.padding(top = 8.dp),
+                            text = stringRes(R.string.emoji__recently_used__removal_tip),
+                            color = contentColor,
+                            fontStyle = FontStyle.Italic,
+                        )
+                    }
+                } else {
+                    LazyVerticalGrid(
+                        state = lazyGridState,
+                        columns = GridCells.Fixed(8),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp, 0.dp)
+                    ) {
+                        emojiMappings.forEach { (category, emojiCategory) ->
+                            if (emojiCategory.isNotEmpty()) {
+                                item(span = { GridItemSpan(8) }) {
+                                    Text(
+                                        text = category.toString(),
+                                        modifier = Modifier.padding(vertical = 8.dp)
+                                    )
+                                }
+
+                                items(emojiCategory) { emojiSet ->
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .aspectRatio(1f)
+                                    ) {
+                                        EmojiKey(
+                                            emojiSet = emojiSet,
+                                            emojiCompatInstance = emojiCompatInstance,
+                                            preferredSkinTone = preferredSkinTone,
+                                            contentColor = contentColor,
+                                            fontSize = emojiKeyFontSize,
+                                            fontSizeMultiplier = fontSizeMultiplier,
+                                            onEmojiInput = { emoji ->
+                                                keyboardManager.inputEventDispatcher.sendDownUp(emoji)
                                                 scope.launch {
-                                                    EmojiRecentlyUsedHelper.removeEmoji(prefs, emoji)
-                                                    recentlyUsedVersion++
-                                                    withContext(Dispatchers.Main) {
-                                                        context.showShortToast(
-                                                            R.string.emoji__recently_used__removal_success_message,
-                                                            "emoji" to emoji.value,
-                                                        )
+                                                    EmojiRecentlyUsedHelper.addEmoji(prefs, emoji)
+                                                }
+                                            },
+                                            onLongPress = { emoji ->
+                                                if (activeCategory == EmojiCategory.RECENTLY_USED) {
+                                                    scope.launch {
+                                                        EmojiRecentlyUsedHelper.removeEmoji(prefs, emoji)
+                                                        recentlyUsedVersion++
+                                                        withContext(Dispatchers.Main) {
+                                                            context.showShortToast(
+                                                                R.string.emoji__recently_used__removal_success_message,
+                                                                "emoji" to emoji.value,
+                                                            )
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        },
-                                    )
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }

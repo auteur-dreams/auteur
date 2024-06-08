@@ -203,6 +203,7 @@ dependencies {
 
     implementation(project(":lib:kotlin"))
     implementation(project(":lib:native"))
+    // implementation(libs.androidx.ui.desktop)
 
     testImplementation(libs.equalsverifier)
     testImplementation(libs.kotest.assertions.core)
