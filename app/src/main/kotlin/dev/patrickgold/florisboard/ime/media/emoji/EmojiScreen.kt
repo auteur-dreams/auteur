@@ -16,13 +16,26 @@
 
 package dev.patrickgold.florisboard.ime.media.emoji
 
+import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -54,6 +67,7 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -64,11 +78,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.IntOffset
@@ -129,6 +146,7 @@ fun EmojiScreen(
     fullEmojiMappings: EmojiData,
     modifier: Modifier = Modifier,
 ) {
+    var customEditText by remember { mutableStateOf<EditText?>(null) }
     val prefs by florisPreferenceModel()
     val context = LocalContext.current
     val application = context.applicationContext as Application
@@ -178,30 +196,63 @@ fun EmojiScreen(
         }
     }
 
+    val focusRequester = remember { FocusRequester() }
+    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+
     Column(modifier = modifier) {
         /* The MediaTab above this column is created in MediaScreen */
 
-        // Search Bar (for Emojis)
+        // Search Bar (for Emojis) in traditional Android UI (unfortunately)
         val emojiViewModel: EmojiViewModel = viewModel(
             factory = ViewModelFactory(application)
         )
-        var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
-        val searchResults by emojiViewModel.searchResults.observeAsState(emptyList())
 
+        AndroidView(
+            factory = { context ->
+                val inflater = LayoutInflater.from(context)
+                val view = inflater.inflate(R.layout.emoji_search_bar, null)
+                val editText = view.findViewById<EditText>(R.id.custom_edit_text)
+                customEditText = editText
 
-        BasicTextField(
-            value = searchQuery,
-            onValueChange = {
-                searchQuery = it
-                emojiViewModel.searchEmojis(it.text)
+                // Set up a global focus change listener
+                view.viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus, newFocus ->
+                    Log.d("EmojiScreen", "Focus changed from: ${oldFocus?.javaClass?.simpleName} to: ${newFocus?.javaClass?.simpleName}")
+                }
+
+                editText.setOnClickListener {
+                    Log.d("EmojiScreen", "EditText clicked")
+                    val focused = editText.requestFocus()
+                    Log.d("EmojiScreen", "EditText requestFocus result: $focused")
+                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val result = imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                    Log.d("EmojiScreen", "showSoftInput result: $result")
+
+                    // Check and log the current focus state
+                    Log.d("EmojiScreen", "EditText has focus: ${editText.hasFocus()}")
+                }
+                editText.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                        Log.d("EmojiScreen", "beforeTextChanged: $s")
+                    }
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        Log.d("EmojiScreen", "onTextChanged: $s")
+                        searchQuery = TextFieldValue(s.toString())
+                        emojiViewModel.searchEmojis(s.toString())
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        Log.d("EmojiScreen", "afterTextChanged: $s")
+                    }
+                })
+                view
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .background(Color.White, CircleShape) // Optional styling
-                .padding(8.dp), // Inner padding for the text field
-            singleLine = true
+                .padding(8.dp)
         )
+
+        val searchResults by emojiViewModel.searchResults.observeAsState(emptyList())
 
         Box(
             modifier = Modifier
@@ -299,6 +350,7 @@ fun EmojiScreen(
 
         EmojiCategoriesTabRow(
             activeCategory = activeCategory,
+            emojiMappings = emojiMappings,
             onCategoryChange = { category ->
                 activeCategory = category
             },
@@ -314,6 +366,7 @@ fun EmojiScreen(
 @Composable
 private fun EmojiCategoriesTabRow(
     activeCategory: EmojiCategory,
+    emojiMappings: Map<EmojiCategory, List<EmojiSet>>,
     onCategoryChange: (EmojiCategory) -> Unit,
     scrollToCategory: (EmojiCategory) -> Unit
 ) {
@@ -345,16 +398,20 @@ private fun EmojiCategoriesTabRow(
         for (category in EmojiCategoryValues) {
             Tab(
                 onClick = {
-                    inputFeedbackController.keyPress(TextKeyData.UNSPECIFIED)
-                    onCategoryChange(category)
-                    scrollToCategory(category)
+                    if (emojiMappings[category]?.isNotEmpty() == true) {
+                        inputFeedbackController.keyPress(TextKeyData.UNSPECIFIED)
+                        onCategoryChange(category)
+                        scrollToCategory(category)
+                    }
                 },
                 selected = activeCategory == category,
-                icon = { Icon(
-                    modifier = Modifier.size(ButtonDefaults.IconSize),
-                    imageVector = category.icon(),
-                    contentDescription = null,
-                ) },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                        imageVector = category.icon(),
+                        contentDescription = null,
+                    )
+                },
                 unselectedContentColor = unselectedContentColor,
                 selectedContentColor = selectedContentColor,
             )

@@ -53,7 +53,6 @@ fun CustomTabRow(
             .padding(horizontal = 12.dp, vertical = 10.dp)
             .clip(RoundedCornerShape(50))
             .background(Color.LightGray)
-            .padding(4.dp)
     ) {
         TabRow(
             selectedTabIndex = selectedTabIndex,
