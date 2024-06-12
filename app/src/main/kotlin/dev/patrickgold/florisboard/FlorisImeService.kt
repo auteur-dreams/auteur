@@ -35,6 +35,7 @@ import android.view.inputmethod.InlineSuggestionsResponse
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.inline.InlinePresentationSpec
@@ -82,6 +83,7 @@ import dev.patrickgold.florisboard.ime.editor.EditorRange
 import dev.patrickgold.florisboard.ime.editor.FlorisEditorInfo
 import dev.patrickgold.florisboard.ime.input.InputFeedbackController
 import dev.patrickgold.florisboard.ime.input.LocalInputFeedbackController
+import dev.patrickgold.florisboard.ime.input.RichInputConnection
 import dev.patrickgold.florisboard.ime.keyboard.FlorisImeSizing
 import dev.patrickgold.florisboard.ime.keyboard.ProvideKeyboardRowBaseHeight
 import dev.patrickgold.florisboard.ime.landscapeinput.LandscapeInputUiMode
@@ -263,12 +265,15 @@ class FlorisImeService : LifecycleInputMethodService() {
     private var isExtractUiShown by mutableStateOf(false)
     private var resourcesContext by mutableStateOf(this as Context)
 
+    private lateinit var richInputConnection: RichInputConnection
+
     init {
         setTheme(R.style.FlorisImeTheme)
     }
 
     override fun onCreate() {
         super.onCreate()
+        richInputConnection = RichInputConnection(this)
         FlorisImeServiceReference = WeakReference(this)
         WindowCompat.setDecorFitsSystemWindows(window.window!!, false)
         subtypeManager.activeSubtypeFlow.collectLatestIn(lifecycleScope) { subtype ->
@@ -280,6 +285,7 @@ class FlorisImeService : LifecycleInputMethodService() {
 
     override fun onCreateInputView(): View {
         super.installViewTreeOwners()
+
         // Instantiate and install bottom sheet host UI view
         val bottomSheetView = FlorisBottomSheetHostUiView()
         window.window!!.findViewById<ViewGroup>(android.R.id.content).addView(bottomSheetView)
@@ -292,6 +298,14 @@ class FlorisImeService : LifecycleInputMethodService() {
     override fun onCreateCandidatesView(): View? {
         // Disable the default candidates view
         return null
+    }
+    fun setEditTextInputConnection(editText: EditText) {
+        richInputConnection.setEmojiSearchIC(editText)
+        richInputConnection.setShouldUseEmojiSearchIC(true)
+    }
+
+    fun resetInputConnection() {
+        richInputConnection.setShouldUseEmojiSearchIC(false)
     }
 
     override fun onCreateExtractTextView(): View {

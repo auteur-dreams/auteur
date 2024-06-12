@@ -98,6 +98,7 @@ import androidx.compose.ui.window.Popup
 import androidx.emoji2.text.EmojiCompat
 import androidx.emoji2.widget.EmojiTextView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.patrickgold.florisboard.FlorisImeService
 import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.app.florisPreferenceModel
 import dev.patrickgold.florisboard.editorInstance
@@ -146,7 +147,6 @@ fun EmojiScreen(
     fullEmojiMappings: EmojiData,
     modifier: Modifier = Modifier,
 ) {
-    var customEditText by remember { mutableStateOf<EditText?>(null) }
     val prefs by florisPreferenceModel()
     val context = LocalContext.current
     val application = context.applicationContext as Application
@@ -196,8 +196,10 @@ fun EmojiScreen(
         }
     }
 
-    val focusRequester = remember { FocusRequester() }
+    var customEditText by remember { mutableStateOf<EditText?>(null) }
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    val florisImeService = context as FlorisImeService
+    val focusManager = LocalFocusManager.current
 
     Column(modifier = modifier) {
         /* The MediaTab above this column is created in MediaScreen */
@@ -219,31 +221,18 @@ fun EmojiScreen(
                     Log.d("EmojiScreen", "Focus changed from: ${oldFocus?.javaClass?.simpleName} to: ${newFocus?.javaClass?.simpleName}")
                 }
 
-                editText.setOnClickListener {
-                    Log.d("EmojiScreen", "EditText clicked")
-                    val focused = editText.requestFocus()
-                    Log.d("EmojiScreen", "EditText requestFocus result: $focused")
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    val result = imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                    Log.d("EmojiScreen", "showSoftInput result: $result")
-
-                    // Check and log the current focus state
-                    Log.d("EmojiScreen", "EditText has focus: ${editText.hasFocus()}")
+                editText.setOnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus) {
+                        florisImeService.setEditTextInputConnection(editText)
+                    } else {
+                        florisImeService.resetInputConnection()
+                    }
                 }
+
                 editText.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        Log.d("EmojiScreen", "beforeTextChanged: $s")
-                    }
-
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        Log.d("EmojiScreen", "onTextChanged: $s")
-                        searchQuery = TextFieldValue(s.toString())
-                        emojiViewModel.searchEmojis(s.toString())
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        Log.d("EmojiScreen", "afterTextChanged: $s")
-                    }
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                    override fun afterTextChanged(s: Editable?) {}
                 })
                 view
             },
