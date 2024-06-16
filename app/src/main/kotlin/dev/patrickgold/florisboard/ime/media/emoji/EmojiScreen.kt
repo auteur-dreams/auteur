@@ -223,7 +223,7 @@ fun EmojiScreen(
 
                 editText.setOnFocusChangeListener { _, hasFocus ->
                     if (hasFocus) {
-                        florisImeService.setEditTextInputConnection(editText)
+                        florisImeService.setEditTextInputConnection()
                     } else {
                         florisImeService.resetInputConnection()
                     }

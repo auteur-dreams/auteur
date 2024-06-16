@@ -22,6 +22,7 @@ import android.content.res.Configuration
 import android.inputmethodservice.ExtractEditText
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
 import android.util.TypedValue
 import android.view.Gravity
@@ -83,7 +84,6 @@ import dev.patrickgold.florisboard.ime.editor.EditorRange
 import dev.patrickgold.florisboard.ime.editor.FlorisEditorInfo
 import dev.patrickgold.florisboard.ime.input.InputFeedbackController
 import dev.patrickgold.florisboard.ime.input.LocalInputFeedbackController
-import dev.patrickgold.florisboard.ime.input.RichInputConnection
 import dev.patrickgold.florisboard.ime.keyboard.FlorisImeSizing
 import dev.patrickgold.florisboard.ime.keyboard.ProvideKeyboardRowBaseHeight
 import dev.patrickgold.florisboard.ime.landscapeinput.LandscapeInputUiMode
@@ -144,7 +144,9 @@ class FlorisImeService : LifecycleInputMethodService() {
         private val InlineSuggestionUiBiggestSize = Size(Int.MAX_VALUE, Int.MAX_VALUE)
 
         fun currentInputConnection(): InputConnection? {
-            return FlorisImeServiceReference.get()?.currentInputConnection
+            val imeInputConnection = FlorisImeServiceReference.get()?.currentInputConnection
+            Log.d("FlorisImeService", "imeInputConnection: $imeInputConnection")
+            return imeInputConnection
         }
 
         fun inputFeedbackController(): InputFeedbackController? {
@@ -265,7 +267,14 @@ class FlorisImeService : LifecycleInputMethodService() {
     private var isExtractUiShown by mutableStateOf(false)
     private var resourcesContext by mutableStateOf(this as Context)
 
-    private lateinit var richInputConnection: RichInputConnection
+    // Input Connection Stuff
+    private lateinit var editText: EditText
+    private var baseInputConnection: InputConnection? = null
+    private var editTextInputConnection: InputConnection? = null
+    private var useEditTextConnection: Boolean = false
+    private var editTextEditorInfo: EditorInfo? = null
+
+
 
     init {
         setTheme(R.style.FlorisImeTheme)
@@ -273,7 +282,6 @@ class FlorisImeService : LifecycleInputMethodService() {
 
     override fun onCreate() {
         super.onCreate()
-        richInputConnection = RichInputConnection(this)
         FlorisImeServiceReference = WeakReference(this)
         WindowCompat.setDecorFitsSystemWindows(window.window!!, false)
         subtypeManager.activeSubtypeFlow.collectLatestIn(lifecycleScope) { subtype ->
@@ -299,15 +307,6 @@ class FlorisImeService : LifecycleInputMethodService() {
         // Disable the default candidates view
         return null
     }
-    fun setEditTextInputConnection(editText: EditText) {
-        richInputConnection.setEmojiSearchIC(editText)
-        richInputConnection.setShouldUseEmojiSearchIC(true)
-    }
-
-    fun resetInputConnection() {
-        richInputConnection.setShouldUseEmojiSearchIC(false)
-    }
-
     override fun onCreateExtractTextView(): View {
         super.installViewTreeOwners()
         // Consider adding a fallback to the default extract edit layout if user reports come
@@ -338,6 +337,13 @@ class FlorisImeService : LifecycleInputMethodService() {
         if (info == null) return
         val editorInfo = FlorisEditorInfo.wrap(info)
         editorInstance.handleStartInput(editorInfo)
+
+        // Input Connection Stuff
+        baseInputConnection = currentInputConnection
+        editTextEditorInfo = info
+        Log.d("FlorisImeService", "baseInputConnection: $baseInputConnection")
+        Log.d("FlorisImeService", "currentInputConnection: ${currentInputConnection()}")
+        Log.d("FlorisImeService", "FlorisImeServiceReference.get()?.currentInputConnection: ${FlorisImeServiceReference.get()?.currentInputConnection}")
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
@@ -351,6 +357,24 @@ class FlorisImeService : LifecycleInputMethodService() {
             editorInstance.handleStartInputView(editorInfo, isRestart = restarting)
         }
     }
+
+    // Input Connection Stuff
+    override fun getCurrentInputConnection(): InputConnection? {
+        return if(useEditTextConnection) {
+            if (editTextInputConnection != null) {
+                editTextInputConnection = editText.onCreateInputConnection(editTextEditorInfo)
+            }
+            Log.d("FlorisImeService", "editTextInputConnection: $editTextInputConnection")
+            editTextInputConnection
+        } else {
+                Log.d("FlorisImeService", "baseInputConnection: $baseInputConnection")
+                baseInputConnection = super.getCurrentInputConnection()
+                return baseInputConnection
+            }
+        }
+
+    fun setEditTextInputConnection() { useEditTextConnection = true }
+    fun resetInputConnection(){ useEditTextConnection = false }
 
     override fun onUpdateSelection(
         oldSelStart: Int,
@@ -797,3 +821,5 @@ class FlorisImeService : LifecycleInputMethodService() {
         }
     }
 }
+
+
