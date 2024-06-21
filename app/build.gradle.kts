@@ -226,6 +226,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-firestore")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.6.0")
 }
 
 fun getGitCommitHash(short: Boolean = false): String {

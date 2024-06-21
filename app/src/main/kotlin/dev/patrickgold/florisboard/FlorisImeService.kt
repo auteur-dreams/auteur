@@ -149,6 +149,10 @@ class FlorisImeService : LifecycleInputMethodService() {
             return imeInputConnection
         }
 
+        fun currentInputEditorInfo(): EditorInfo? {
+            return FlorisImeServiceReference.get()?.currentInputEditorInfo
+        }
+
         fun inputFeedbackController(): InputFeedbackController? {
             return FlorisImeServiceReference.get()?.inputFeedbackController
         }
@@ -273,6 +277,8 @@ class FlorisImeService : LifecycleInputMethodService() {
     private var editTextInputConnection: InputConnection? = null
     private var useEditTextConnection: Boolean = false
     private var editTextEditorInfo: EditorInfo? = null
+
+
 
 
 
