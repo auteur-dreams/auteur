@@ -16,6 +16,7 @@
 
 package dev.patrickgold.florisboard
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -605,6 +606,8 @@ class FlorisImeService : LifecycleInputMethodService() {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     private fun ImeUi() {
+        val context = this
+        val application = context.applicationContext as Application
         val state by keyboardManager.activeState.collectAsState()
         val keyboardStyle = FlorisImeTheme.style.get(
             element = FlorisImeUi.Keyboard,
@@ -647,7 +650,7 @@ class FlorisImeService : LifecycleInputMethodService() {
                         ) {
                             when (state.imeUiMode) {
                                 ImeUiMode.TEXT -> TextInputLayout()
-                                ImeUiMode.MEDIA -> MediaInputLayout()
+                                ImeUiMode.MEDIA -> MediaInputLayout(application)
                                 ImeUiMode.CLIPBOARD -> ClipboardInputLayout()
                             }
                         }

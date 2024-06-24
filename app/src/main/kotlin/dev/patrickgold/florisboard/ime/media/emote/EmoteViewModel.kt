@@ -28,10 +28,29 @@ class EmoteViewModel(application: Application) : AndroidViewModel(application) {
     private val _emotes = MutableStateFlow<List<Emote>>(emptyList())
     val emotes: StateFlow<List<Emote>> = _emotes.asStateFlow()
 
-    fun getRemoteEmotesByCategory(categoryName: String) {
+    init {
+        // Load local emotes when the ViewModel is created
+        loadLocalEmotes()
+    }
+
+    fun getRemoteEmotesByCategory(categoryName: String, context: Context) {
         viewModelScope.launch {
             EmoteRepository.getRemoteEmotesByCategory(categoryName).collect { fetchedEmotes ->
-                _emotes.value = fetchedEmotes
+                fetchedEmotes.forEach { emote ->
+                    handleEmoteDownload(emote, context)
+                }
+                loadLocalEmotes() // Update local emotes after downloading
+            }
+        }
+    }
+
+    private fun handleEmoteDownload(emote : Emote, context : Context){
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = emoteDownloader.downloadEmote(emote.name, emote.drawableName, context, emote.categories, emote.fileType)
+            if(result != null) {
+                Log.d(TAG, "Successfully downloaded emote: ${result.name}, local path: ${result.localPath}")
+            } else {
+                Log.d(TAG, "Failed to download emote: ${emote.name}")
             }
         }
     }
@@ -98,13 +117,10 @@ class EmoteViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun handleEmoteDownload(emote : Emote, context : Context){
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = emoteDownloader.downloadEmote(emote.name, emote.drawableName, context, emote.categories)
-            if(result != null) {
-                Log.d(TAG, "Successfully downloaded emote: ${result.name}, local path: ${result.localPath}")
-            } else {
-                Log.d(TAG, "Failed to download emote: ${emote.name}")
+    private fun loadLocalEmotes() {
+        viewModelScope.launch {
+            EmoteRepository.getAllLocalEmotes().collect { localEmotes ->
+                _emotes.value = localEmotes
             }
         }
     }

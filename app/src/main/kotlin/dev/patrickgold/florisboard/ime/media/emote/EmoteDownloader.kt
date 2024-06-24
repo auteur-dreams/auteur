@@ -14,18 +14,21 @@ class EmoteDownloader(private val emoteRepository: EmoteRepository) {
 
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    suspend fun downloadEmote(name: String, drawableName: String, context: Context, categories: List<String>?): Emote? {
+    suspend fun downloadEmote(name: String, drawableName: String, context: Context, categories: List<String>?, fileType: String): Emote? {
         val emote = emoteRepository.getLocalEmoteByName(name)
         if (emote?.localPath != null && File(emote.localPath).exists()) {
             Log.d(TAG, "Emote already downloaded: ${emote.name}")
             return emote
         } else {
             try {
-                val imageRef = firebaseStorage.getReference("$drawableName.png")
+                val imageRef = firebaseStorage.getReference("$fileType/$drawableName.$fileType")
+                Log.d(TAG, "Attempting to download emote: $name from path: ${imageRef.path}")
                 val bytes = imageRef.getBytes(ONE_MEGABYTE).await()
                 val localPath = saveToLocalFile(bytes, drawableName, context)
+                Log.d(TAG, "Emote saved locally at path: $localPath")
                 val newEmote = Emote(name = name, drawableName = drawableName, categories = categories, localPath = localPath)
                 emoteRepository.insertOrUpdateEmote(newEmote)
+                Log.d(TAG, "Emote inserted or updated in repository: $name")
                 return newEmote
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to download emote: $name", e)

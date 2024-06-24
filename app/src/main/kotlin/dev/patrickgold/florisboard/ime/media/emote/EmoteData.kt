@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.TypeConverters
+import com.google.firebase.firestore.DocumentSnapshot
 import dev.patrickgold.florisboard.lib.util.Converters
 import kotlinx.serialization.Serializable
 
@@ -21,16 +22,37 @@ data class Category(
 data class Emote(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    var objectID: String = "", // Firestore's document id
     var name: String = "",
     var drawableName: String = "",
     var categories: List<String>? = null,
     var remoteUrl: String = "",
     var localPath: String = "",
     var isDownloaded: Boolean = false,
+    var fileType: String = "",
     var type: Type = Type.STATIC
 ) {
     enum class Type {
         STATIC, ANIMATED
+    }
+
+    companion object {
+        fun fromDocument(document: DocumentSnapshot): Emote {
+            return Emote(
+                objectID = document.id,
+                name = document.getString("name") ?: "",
+                drawableName = document.getString("drawableName") ?: "",
+                categories = document.get("categories") as? List<String>,
+                remoteUrl = document.getString("remoteUrl") ?: "",
+                localPath = document.getString("localPath") ?: "",
+                isDownloaded = document.getBoolean("isDownloaded") ?: false,
+                fileType = document.getString("fileType") ?: "",
+                type = when (document.getString("fileType")) {
+                    "gif" -> Type.ANIMATED
+                    else -> Type.STATIC
+                }
+            )
+        }
     }
 
     override fun equals(other: Any?): Boolean {

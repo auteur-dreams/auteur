@@ -23,6 +23,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.mannodermaus.android.junit5)
     alias(libs.plugins.mikepenz.aboutlibraries)
+
+    id("com.google.gms.google-services")
 }
 
 val projectMinSdk: String by project
@@ -229,6 +231,7 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
 
 fun getGitCommitHash(short: Boolean = false): String {

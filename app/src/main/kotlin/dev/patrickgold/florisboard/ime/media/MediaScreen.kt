@@ -1,6 +1,7 @@
 package dev.patrickgold.florisboard.ime.media
 
 import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import dev.patrickgold.florisboard.ime.media.gif.GifScreen
 fun MediaScreen(
     fullEmojiMappings: EmojiData,
     modifier: Modifier = Modifier,
+    application: Application
 ) {
     var selectedTab by remember { mutableStateOf(MediaTab.EMOJI) }
     val tabs = MediaTab.entries.toTypedArray()
@@ -35,7 +37,7 @@ fun MediaScreen(
 
         when (selectedTab) {
             MediaTab.EMOJI -> EmojiScreen(fullEmojiMappings)
-            MediaTab.EMOTE -> EmoteScreen()
+            MediaTab.EMOTE -> EmoteScreen(application)
             MediaTab.GIF -> GifScreen()
         }
     }

@@ -20,9 +20,16 @@ object EmoteRemoteRepository {
     // Fetches all emotes from Firestore and exposes them as StateFlow
     fun getAllEmotes(): StateFlow<List<Emote>> {
         return flow {
-            val snapshot = firestoreDb.collection("emotes").get().await()
-            val emotes = snapshot.toObjects(Emote::class.java)
-            emit(emotes)
+            try {
+                val snapshot = firestoreDb.collection("emotes").get().await()
+                val emotes = snapshot.documents.mapNotNull { document ->
+                    Emote.fromDocument(document)
+                }
+                emit(emotes)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching all emotes", e)
+                emit(emptyList<Emote>())  // Emitting empty list on error
+            }
         }.stateIn(repositoryRemoteScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(), emptyList())
     }
 
@@ -36,7 +43,9 @@ object EmoteRemoteRepository {
                     .whereArrayContains("categories", categoryNameLower)
                     .get()
                     .await()
-                val emotes = snapshot.toObjects(Emote::class.java)
+                val emotes = snapshot.documents.mapNotNull { document ->
+                    Emote.fromDocument(document)
+                }
                 Log.d(TAG, "Fetched ${emotes.size} emotes for category: $categoryNameLower")
                 emit(emotes)
             } catch (e: Exception) {

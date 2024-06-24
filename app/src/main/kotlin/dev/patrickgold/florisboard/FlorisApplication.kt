@@ -24,6 +24,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import androidx.core.os.UserManagerCompat
+import com.google.firebase.FirebaseApp
 import dev.patrickgold.florisboard.app.florisPreferenceModel
 import dev.patrickgold.florisboard.ime.clipboard.ClipboardManager
 import dev.patrickgold.florisboard.ime.core.SubtypeManager
@@ -31,6 +32,9 @@ import dev.patrickgold.florisboard.ime.dictionary.DictionaryManager
 import dev.patrickgold.florisboard.ime.editor.EditorInstance
 import dev.patrickgold.florisboard.ime.keyboard.KeyboardManager
 import dev.patrickgold.florisboard.ime.media.emoji.FlorisEmojiCompat
+import dev.patrickgold.florisboard.ime.media.emote.EmoteLocalRepository
+import dev.patrickgold.florisboard.ime.media.emote.EmoteLocalUserDatabase
+import dev.patrickgold.florisboard.ime.media.emote.EmoteRepository
 import dev.patrickgold.florisboard.ime.nlp.NlpManager
 import dev.patrickgold.florisboard.ime.text.gestures.GlideTypingManager
 import dev.patrickgold.florisboard.ime.theme.ThemeManager
@@ -114,6 +118,11 @@ class FlorisApplication : Application() {
         extensionManager.value.init()
         clipboardManager.value.initializeForContext(this)
         DictionaryManager.init(this)
+
+        initializeFirebase()
+        initializeRoomDatabase()
+        initializeEmoteLocalRepository()
+        initializeEmoteRepository()
     }
 
     private inner class BootComplete : BroadcastReceiver() {
@@ -128,6 +137,23 @@ class FlorisApplication : Application() {
                 mainHandler.post { init() }
             }
         }
+    }
+
+    private fun initializeFirebase() {
+        FirebaseApp.initializeApp(this)
+    }
+
+    private fun initializeRoomDatabase() {
+        // This initializes the Room database and logs its successful setup
+        EmoteLocalUserDatabase.getDatabase(this)
+    }
+
+    private fun initializeEmoteLocalRepository() {
+        EmoteLocalRepository.initialize(this)
+    }
+
+    private fun initializeEmoteRepository() {
+        EmoteRepository.initialize(this)
     }
 }
 

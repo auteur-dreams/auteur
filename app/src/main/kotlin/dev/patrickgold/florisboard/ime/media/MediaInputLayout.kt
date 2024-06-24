@@ -17,6 +17,8 @@
 package dev.patrickgold.florisboard.ime.media
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -62,7 +64,8 @@ import dev.patrickgold.florisboard.lib.snygg.ui.SnyggSurface
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun MediaInputLayout(
-    modifier: Modifier = Modifier,
+    application: Application,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val keyboardManager by context.keyboardManager()
@@ -79,8 +82,9 @@ fun MediaInputLayout(
                 .height(FlorisImeSizing.imeUiHeight() + FlorisImeSizing.mediaScreenAdjustment),
         ) {
             MediaScreen(
-                modifier = Modifier.weight(1f),
                 fullEmojiMappings = emojiLayoutDataMap,
+                modifier = Modifier.weight(1f),
+                application
             )
             Row(
                 modifier = Modifier
