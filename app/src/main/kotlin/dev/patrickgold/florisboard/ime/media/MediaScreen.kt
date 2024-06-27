@@ -38,7 +38,7 @@ fun MediaScreen(
         when (selectedTab) {
             MediaTab.EMOJI -> EmojiScreen(fullEmojiMappings)
             MediaTab.EMOTE -> EmoteScreen(application)
-            MediaTab.GIF -> GifScreen()
+            MediaTab.GIF -> GifScreen(application)
         }
     }
 }
