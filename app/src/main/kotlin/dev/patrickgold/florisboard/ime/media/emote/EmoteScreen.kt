@@ -24,10 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.imageLoader
-import coil.request.ImageRequest
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import dev.patrickgold.florisboard.ime.media.ViewModelFactory
 
 

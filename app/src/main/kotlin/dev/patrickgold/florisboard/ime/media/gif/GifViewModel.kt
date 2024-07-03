@@ -33,6 +33,7 @@ class GifViewModel(application: Application) : AndroidViewModel(application) {
         private fun getFeaturedGifs(limit: Int): JSONObject? {
             // get the Featured GIFS - using the default locale of en_US
             val url = "https://tenor.googleapis.com/v2/featured?key=$API_KEY&client_key=$CLIENT_KEY&limit=$limit"
+            Log.d(TAG, "Request URL: $url")
             return try {
                 get(url)
             } catch (ignored: IOException) {
@@ -68,7 +69,7 @@ class GifViewModel(application: Application) : AndroidViewModel(application) {
                 connection = URL(url).openConnection() as HttpURLConnection
                 connection.apply {
                     doInput = true
-                    doOutput = true
+                    doOutput = false
                     requestMethod = "GET"
                     setRequestProperty("Content-Type", "application/json")
                     setRequestProperty("Accept", "application/json")
@@ -77,6 +78,7 @@ class GifViewModel(application: Application) : AndroidViewModel(application) {
 
                 // Handle failure
                 val statusCode = connection.responseCode
+                Log.d(TAG, "HTTP status code: $statusCode")
                 if (statusCode != HttpURLConnection.HTTP_OK && statusCode != HttpURLConnection.HTTP_CREATED) {
                     val error = "HTTP Code: '$statusCode' from '$url'"
                     throw ConnectException(error)
@@ -118,34 +120,63 @@ class GifViewModel(application: Application) : AndroidViewModel(application) {
     private val _gifs = MutableStateFlow<List<String>>(emptyList())
     val gifs: StateFlow<List<String>> = _gifs.asStateFlow()
 
+    private val _trendingSearchTerms = MutableStateFlow<List<String>>(emptyList())
+    val trendingSearchTerms: StateFlow<List<String>> = _trendingSearchTerms.asStateFlow()
+
+    private val _categories = MutableStateFlow<List<String>>(emptyList())
+    val categories: StateFlow<List<String>> = _categories.asStateFlow()
+
     init {
         viewModelScope.launch {
-            loadGifs()
+            loadTrendingSearchTerms()
+            loadCategories()
         }
     }
 
-    suspend fun loadGifs() {
+    suspend fun loadGifs(query: String) {
         withContext(Dispatchers.IO) {
-            // get the top 10 featured GIFs
-            val featuredGifs = getFeaturedGifs(10)
+            val url = "https://tenor.googleapis.com/v2/search?q=$query&key=$API_KEY&client_key=$CLIENT_KEY&limit=10"
+            val searchResults = get(url)
             val gifs = mutableListOf<String>()
-            featuredGifs?.getJSONArray("results")?.let { results ->
+            searchResults.getJSONArray("results")?.let { results ->
                 for (i in 0 until results.length()) {
                     val gif = results.getJSONObject(i)
-                    val media = gif.getJSONArray("media_formats")
-                    val gifUrl = media.getJSONObject(0).getString("gif_url")
+                    val media = gif.getJSONObject("media_formats")
+                    val gifUrl = media.getJSONObject("tinygif").getString("url")
                     gifs.add(gifUrl)
                 }
             }
-
-            // get the current list of categories
-            val categories = getCategories()
-
-            // load the results for the user
-            Log.d(TAG, "Featured GIFS: ${featuredGifs.toString()}")
-            Log.d(TAG, "GIF Categories: ${categories.toString()}")
-
             _gifs.value = gifs
+        }
+    }
+
+    suspend fun loadCategories() {
+        withContext(Dispatchers.IO) {
+            val url = "https://tenor.googleapis.com/v2/categories?key=$API_KEY&client_key=$CLIENT_KEY"
+            val categoriesResults = get(url)
+            val categories = mutableListOf<String>()
+            categoriesResults.getJSONArray("tags")?.let { tags ->
+                for (i in 0 until tags.length()) {
+                    val category = tags.getJSONObject(i).getString("searchterm")
+                    categories.add(category)
+                }
+            }
+            _categories.value = categories
+        }
+    }
+
+    suspend fun loadTrendingSearchTerms() {
+        withContext(Dispatchers.IO) {
+            val url = "https://tenor.googleapis.com/v2/trending_terms?key=$API_KEY&client_key=$CLIENT_KEY"
+            val trendingResults = get(url)
+            val terms = mutableListOf<String>()
+            trendingResults.getJSONArray("results")?.let { results ->
+                for (i in 0 until results.length()) {
+                    val term = results.getString(i)
+                    terms.add(term)
+                }
+            }
+            _trendingSearchTerms.value = terms
         }
     }
 
